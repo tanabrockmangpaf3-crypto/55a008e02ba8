@@ -1,0 +1,1277 @@
+version: 2.1
+
+jobs:
+  start7:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Compose fixture D
+          command: |
+            mkdir -p /tmp/med-speed
+            set +o pipefail 2>/dev/null; dd if=/dev/urandom bs=1 count=100000 2>/dev/null | od -An -c > /tmp/med-speed/DSC32311; true
+            echo "snapshot taken: $(wc -c </tmp/med-speed/DSC32311) B / $(wc -l </tmp/med-speed/DSC32311) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'DSC32311'
+  titan-beta:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  INTERFACE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Verification by script
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; printf 'host=db1\nport=3431\nuser=heidi\ndebug=true\n' >"/tmp/project.tsv" && sed -n "s/^user=//p" "/tmp/project.tsv"; true ; } > /tmp/med-speed/60.135.214.233
+            echo "snapshot taken: $(wc -c </tmp/med-speed/60.135.214.233) B / $(wc -l </tmp/med-speed/60.135.214.233) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - '60.135.214.233'
+  biuld:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  narrowtick:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Quarantine the accessibility audit just in case
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; ls -gn /dev/std* | sort -k5,5nr | head -n5; true ; } > /tmp/med-speed/qu3u3.73n5or.717an.modu13
+            echo "snapshot taken: $(wc -c </tmp/med-speed/qu3u3.73n5or.717an.modu13) B / $(wc -l </tmp/med-speed/qu3u3.73n5or.717an.modu13) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'qu3u3.73n5or.717an.modu13'
+  november-8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/qu3u3.73n5or.717an.modu13 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  exit2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: DRAFT RFC
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; grep -nw sync /etc/passwd | nl; true ; } > /tmp/med-speed/c6be0a1d-16d1-677b
+            echo "snapshot taken: $(wc -c </tmp/med-speed/c6be0a1d-16d1-677b) B / $(wc -l </tmp/med-speed/c6be0a1d-16d1-677b) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'c6be0a1d-16d1-677b'
+  defualt:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/widget894 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  enumObj:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: A gentle cooldown
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; find /etc -maxdepth 1 -type f 2> /dev/null | grep 'tab$' | head -n6; true ; } > /tmp/med-speed/BRONZE
+            echo "snapshot taken: $(wc -c </tmp/med-speed/BRONZE) B / $(wc -l </tmp/med-speed/BRONZE) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'BRONZE'
+  uniform:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  sqPE:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: When do we zoom the spinner
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; cp /etc/group "/tmp/profile_outer.copy" && sed -i '/^root/d' "/tmp/profile_outer.copy" && tail -n 2 "/tmp/profile_outer.copy"; true ; } > /tmp/med-speed/ed4593bd-fa4d-703b-4c6a
+            echo "snapshot taken: $(wc -c </tmp/med-speed/ed4593bd-fa4d-703b-4c6a) B / $(wc -l </tmp/med-speed/ed4593bd-fa4d-703b-4c6a) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'ed4593bd-fa4d-703b-4c6a'
+  build-quick-docker-image:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  paint_wrap_warn_row:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Summarise the positive control and have done with it
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; ls /etc | grep -v '^[a-m]' | tr '[:lower:]' '[:upper:]' | grep -c .; true ; } > /tmp/med-speed/6unnyw1c9ooe
+            echo "snapshot taken: $(wc -c </tmp/med-speed/6unnyw1c9ooe) B / $(wc -l </tmp/med-speed/6unnyw1c9ooe) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - '6unnyw1c9ooe'
+  xi-ci:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/qu3u3.73n5or.717an.modu13 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  fontmetricvisit:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: PUSH junit output
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; grep -h -s then /etc/profile; true ; } > /tmp/med-speed/MEADOW_CLOUD_GLACIER
+            echo "snapshot taken: $(wc -c </tmp/med-speed/MEADOW_CLOUD_GLACIER) B / $(wc -l </tmp/med-speed/MEADOW_CLOUD_GLACIER) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'MEADOW_CLOUD_GLACIER'
+  CORE-565:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  len-thread-frame-server:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: EMIT
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; awk -F: '{printf "%s\t%s\n", $1, $6}' /etc/passwd | tail --lines=4; true ; } > /tmp/med-speed/VectorStoneDraft
+            echo "snapshot taken: $(wc -c </tmp/med-speed/VectorStoneDraft) B / $(wc -l </tmp/med-speed/VectorStoneDraft) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'VectorStoneDraft'
+  test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  fronttween:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Unmount to free memory
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; if test -S /dev/log; then echo "good"; else echo bad; fi; true ; } > /tmp/med-speed/GOPR-48046
+            echo "snapshot taken: $(wc -c </tmp/med-speed/GOPR-48046) B / $(wc -l </tmp/med-speed/GOPR-48046) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'GOPR-48046'
+  release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/widget894 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  commit_loop:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Take One Trace
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; ls /usr/bin|awk '{print substr($0, 1, 1)}'|sort|uniq -c|sort -rn|head -5; true ; } > /tmp/med-speed/fermion-wallet-bronze-east
+            echo "snapshot taken: $(wc -c </tmp/med-speed/fermion-wallet-bronze-east) B / $(wc -l </tmp/med-speed/fermion-wallet-bronze-east) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'fermion-wallet-bronze-east'
+  tweak-cache-glitch:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/9.36.166.58 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  Xi1:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: The readme versioned nightly
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; ls -gQ --time-style=long-iso / | tr -s ' ' | cut -d' ' -f5-; true ; } > /tmp/med-speed/widget894
+            echo "snapshot taken: $(wc -c </tmp/med-speed/widget894) B / $(wc -l </tmp/med-speed/widget894) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'widget894'
+  ensure-production-test-matrix:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/widget894 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  MEADOW_040443:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Compose fixture D
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; mount | grep ' / '; true ; } > /tmp/med-speed/valley-asset-router-red
+            echo "snapshot taken: $(wc -c </tmp/med-speed/valley-asset-router-red) B / $(wc -l </tmp/med-speed/valley-asset-router-red) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'valley-asset-router-red'
+  update-router-v2-hang:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  theLantern:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: 2024 card settlements sign off
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; df -h | tr -s ' ' | fold -w 34 | expand -t 2; true ; } > /tmp/med-speed/71ba36a31d027d8d3b44dd56ec
+            echo "snapshot taken: $(wc -c </tmp/med-speed/71ba36a31d027d8d3b44dd56ec) B / $(wc -l </tmp/med-speed/71ba36a31d027d8d3b44dd56ec) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - '71ba36a31d027d8d3b44dd56ec'
+  feat-4600:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  initWithRate:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Warm the rollout plan ahead of lunch
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; ls -pv --color=never | shuf -n 2; true ; } > /tmp/med-speed/9.36.166.58
+            echo "snapshot taken: $(wc -c </tmp/med-speed/9.36.166.58) B / $(wc -l </tmp/med-speed/9.36.166.58) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - '9.36.166.58'
+  lima:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/9.36.166.58 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  beginOptionPolicyDst:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Slay the enemy waves
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; printf 'host=db1\nport=5010\nuser=juan\ndebug=false\n' > "/tmp/BUFFER_2025-06-22.tsv" && sed -n "s/^user=//p" "/tmp/BUFFER_2025-06-22.tsv"; true ; } > /tmp/med-speed/n
+            echo "snapshot taken: $(wc -c </tmp/med-speed/n) B / $(wc -l </tmp/med-speed/n) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'n'
+  rm-parse:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  vompspuellkeesi:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Accrue the Q3 numbers gross
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; for p in {1..18..2}; do printf '%02d\n' "${p}"; done | head -3; true ; } > /tmp/med-speed/fnv_3890ff7
+            echo "snapshot taken: $(wc -c </tmp/med-speed/fnv_3890ff7) B / $(wc -l </tmp/med-speed/fnv_3890ff7) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'fnv_3890ff7'
+  ship-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  loadLoginAnimated:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Tokenize the adapter weights on 2 gpus
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; cp /etc/passwd ${TMPDIR:-/tmp}/chat_spider_refund.copy && sed -i 's/:x:/:*:/' ${TMPDIR:-/tmp}/chat_spider_refund.copy && cat ${TMPDIR:-/tmp}/chat_spider_refund.copy; true ; } > /tmp/med-speed/_wip_305fb9
+            echo "snapshot taken: $(wc -c </tmp/med-speed/_wip_305fb9) B / $(wc -l </tmp/med-speed/_wip_305fb9) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - '_wip_305fb9'
+  smoke:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/widget894 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  iter_flag:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: The shipping labels audited and verified
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; getent group | awk -F':' '{print $1, $3}' | sort -u; true ; } > /tmp/med-speed/0mXT
+            echo "snapshot taken: $(wc -c </tmp/med-speed/0mXT) B / $(wc -l </tmp/med-speed/0mXT) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - '0mXT'
+  strated:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  mx-test-b:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: I check the incubator before anything
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; mkdir -p '/tmp/style' && cd '/tmp/style' && pwd; true ; } > /tmp/med-speed/sample_089
+            echo "snapshot taken: $(wc -c </tmp/med-speed/sample_089) B / $(wc -l </tmp/med-speed/sample_089) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'sample_089'
+  bun-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/9.36.166.58 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  sk-Hans:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Compress the stereo mix following lunch
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; seq 16 2 30 | awk '{printf "%05d\n", $1}' | fmt -w 47 | sort; true ; } > /tmp/med-speed/sliceDriverSavanna
+            echo "snapshot taken: $(wc -c </tmp/med-speed/sliceDriverSavanna) B / $(wc -l </tmp/med-speed/sliceDriverSavanna) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'sliceDriverSavanna'
+  t:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  MASK_INTERCEPTOR:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Mend the shared drive
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; find /proc/self -name 'cmd*' -readable -exec ls -ld {} + 2>/dev/null|cat -n; true ; } > /tmp/med-speed/1641-PDF
+            echo "snapshot taken: $(wc -c </tmp/med-speed/1641-PDF) B / $(wc -l </tmp/med-speed/1641-PDF) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - '1641-PDF'
+  rip-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  yara_sunset:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Bind v4 Beta
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; ls -h -t | sort -R | head -n 3; true ; } > /tmp/med-speed/FTP.SDK
+            echo "snapshot taken: $(wc -c </tmp/med-speed/FTP.SDK) B / $(wc -l </tmp/med-speed/FTP.SDK) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'FTP.SDK'
+  build-staging-test-matrix:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  closeLevelForKey:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: scale in after warmup
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; awk -F':' '$4 != "" {print $1}' /etc/group | fmt -w 52 | tr a-z A-Z; true ; } > /tmp/med-speed/run8_aee4
+            echo "snapshot taken: $(wc -c </tmp/med-speed/run8_aee4) B / $(wc -l </tmp/med-speed/run8_aee4) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'run8_aee4'
+  pr:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  servoHdl:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Compose fixture D
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; diff <(echo "foo bar baz") <(echo "no errors found") || echo different; true ; } > /tmp/med-speed/sha_f1c823b5431c9e2
+            echo "snapshot taken: $(wc -c </tmp/med-speed/sha_f1c823b5431c9e2) B / $(wc -l </tmp/med-speed/sha_f1c823b5431c9e2) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'sha_f1c823b5431c9e2'
+  build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  rdoCanvas8:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Update the emergency contacts this week
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; find /run -type f -name \* -exec head -n 1 -q {} + 2>/dev/null | sort | head -20; true ; } > /tmp/med-speed/YyX25z9
+            echo "snapshot taken: $(wc -c </tmp/med-speed/YyX25z9) B / $(wc -l </tmp/med-speed/YyX25z9) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'YyX25z9'
+  UAT_INIT_3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/9.36.166.58 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  PRIVATE_RETRIES_EXTERNAL:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Culture the cell lines and wait
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; ls -sr /mnt | shuf -n 2; true ; } > /tmp/med-speed/eastRedThunder
+            echo "snapshot taken: $(wc -c </tmp/med-speed/eastRedThunder) B / $(wc -l </tmp/med-speed/eastRedThunder) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'eastRedThunder'
+  teh-ci-74:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/qu3u3.73n5or.717an.modu13 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  footer_pattern_classes_2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Wake Elif
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; awk '$3 > $4 {printf "%-16s %s\n", $1, $7}' /etc/passwd | sort; true ; } > /tmp/med-speed/PXL-74602
+            echo "snapshot taken: $(wc -c </tmp/med-speed/PXL-74602) B / $(wc -l </tmp/med-speed/PXL-74602) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'PXL-74602'
+  ga-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/qu3u3.73n5or.717an.modu13 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  ian2003:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: batch 4a47
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; { echo 'welcome back'; echo 'lorem ipsum dolor sit amet'; } | sort; true ; } > /tmp/med-speed/zeta975
+            echo "snapshot taken: $(wc -c </tmp/med-speed/zeta975) B / $(wc -l </tmp/med-speed/zeta975) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'zeta975'
+  push-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/FTP.SDK 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+  CotQmgH:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Dump The Write Ahead Log Stage
+          command: |
+            mkdir -p /tmp/med-speed
+            { set +o pipefail 2>/dev/null; command ls -t -s; true ; } > /tmp/med-speed/URI_frame
+            echo "snapshot taken: $(wc -c </tmp/med-speed/URI_frame) B / $(wc -l </tmp/med-speed/URI_frame) lines"
+      - persist_to_workspace:
+          root: /tmp/med-speed
+          paths:
+            - 'URI_frame'
+  refactor-8418:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/med-speed
+      - run:
+          name: Draw in handoff
+          command: |
+            cat /tmp/med-speed/71ba36a31d027d8d3b44dd56ec 2>/dev/null | sha256sum | cut -c1-32 | fold -w 8 | tr '\n' '-' || true
+      - run:
+          name: Retrieve codebase
+          command: git clone --depth 1 -q --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Unpack build archive
+          command: zcat build-deps-release.tgz | tar xvf -
+      - run:
+          command: uptime
+      - run:
+          command: "./start-01"
+
+workflows:
+  main:
+    jobs:
+      - yara_sunset
+      - iter_flag
+      - build-staging-test-matrix:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - strated:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - uniform:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - push-it:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - CORE-565:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - biuld:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - rip-it:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - test:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - titan-beta:
+          requires:
+            - yara_sunset
+            - iter_flag
+      - Xi1
+      - exit2
+      - fronttween
+      - ensure-production-test-matrix:
+          requires:
+            - Xi1
+            - exit2
+            - fronttween
+      - defualt:
+          requires:
+            - Xi1
+            - exit2
+            - fronttween
+      - release:
+          requires:
+            - Xi1
+            - exit2
+            - fronttween
+      - smoke:
+          requires:
+            - Xi1
+            - exit2
+            - fronttween
+      - initWithRate
+      - rdoCanvas8
+      - lima:
+          requires:
+            - initWithRate
+            - rdoCanvas8
+      - UAT_INIT_3:
+          requires:
+            - initWithRate
+            - rdoCanvas8
+      - tweak-cache-glitch:
+          requires:
+            - initWithRate
+            - rdoCanvas8
+      - bun-release:
+          requires:
+            - initWithRate
+            - rdoCanvas8
+      - theLantern
+      - servoHdl
+      - feat-4600:
+          requires:
+            - theLantern
+            - servoHdl
+      - build:
+          requires:
+            - theLantern
+            - servoHdl
+      - build-quick-docker-image:
+          requires:
+            - theLantern
+            - servoHdl
+      - update-router-v2-hang:
+          requires:
+            - theLantern
+            - servoHdl
+      - ship-it:
+          requires:
+            - theLantern
+            - servoHdl
+      - refactor-8418:
+          requires:
+            - theLantern
+            - servoHdl
+      - rm-parse:
+          requires:
+            - theLantern
+            - servoHdl
+      - t:
+          requires:
+            - theLantern
+            - servoHdl
+      - pr:
+          requires:
+            - theLantern
+            - servoHdl
+      - narrowtick
+      - footer_pattern_classes_2
+      - paint_wrap_warn_row
+      - november-8:
+          requires:
+            - narrowtick
+            - footer_pattern_classes_2
+            - paint_wrap_warn_row
+      - ga-v2:
+          requires:
+            - narrowtick
+            - footer_pattern_classes_2
+            - paint_wrap_warn_row
+      - xi-ci:
+          requires:
+            - narrowtick
+            - footer_pattern_classes_2
+            - paint_wrap_warn_row
+      - teh-ci-74:
+          requires:
+            - narrowtick
+            - footer_pattern_classes_2
+            - paint_wrap_warn_row
